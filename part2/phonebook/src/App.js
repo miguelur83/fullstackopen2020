@@ -7,6 +7,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect (() => {
     console.log('effect')
@@ -36,10 +38,30 @@ const App = () => {
           .then(response => {
             setPersons(persons.map((person) => (person.id === theperson.id?theperson:person)))
             console.log(response)
+            setNotificationMessage(
+              `${theperson.name}'s number was updated to the server`
+            )
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
+          })
+          .catch(error => {
+            setErrorMessage(
+              `${theperson.name} was already deleted from the server`
+            )
+            setPersons(persons.filter((person) => (person.id != theperson.id)))
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
         }
       } else {
-        alert (`${newName} is already added to phonebook`)
+        setErrorMessage(
+          `${newName} is already added to phonebook`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       }
     } else {
       console.log("Saving person");
@@ -47,8 +69,12 @@ const App = () => {
       .create(newPerson)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
+        setNotificationMessage(
+          `${returnedPerson.name} was saved to the server`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
       })
     }
   }
@@ -62,6 +88,15 @@ const App = () => {
       .then(response => {
         console.log(response);
         setPersons(persons.filter(person => person.id != event.target.id))
+      })
+      .catch(error => {
+        setErrorMessage(
+          `${person.name} was already deleted from the server`
+        )
+        setPersons(persons.filter((aperson) => (aperson.id != person.id)))
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
     }
   }
@@ -81,6 +116,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} type="notification" />
+      <Notification message={errorMessage} type="error" />
       <Filter filterHandler = {handleFilterChange} />
       <h3>Add a new person</h3>
       <PersonForm handleOnSubmit={handleOnSubmit} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
@@ -94,6 +131,18 @@ const Filter = ({filterHandler}) => {
   return (
     <div>
       filter by name: <input onChange={filterHandler} />
+    </div>
+  )
+}
+
+const Notification = ({ message, type }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={type}>
+      {message}
     </div>
   )
 }
