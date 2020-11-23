@@ -13,7 +13,7 @@ const App = () => {
   useEffect (() => {
     console.log('effect')
     axios
-      .get('http://localhost:3001/persons')
+      .get('https://safe-reef-89727.herokuapp.com/api/persons')
       .then(response => {
         setPersons(response.data)
         console.log(response.data)
