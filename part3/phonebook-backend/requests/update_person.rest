@@ -1,0 +1,8 @@
+PUT http://localhost:3001/api/persons/5fbd68ffe0792056b8d11a6a HTTP/1.1
+content-type: application/json
+
+{
+    "id": "5fbd68ffe0792056b8d11a6a",
+    "name": "Miguel Urdinola",
+    "number": "UPDATED"
+}

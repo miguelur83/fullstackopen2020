@@ -9,11 +9,12 @@ const App = () => {
   const [ filter, setFilter ] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const apiURL = "/api/persons"
 
   useEffect (() => {
     console.log('effect')
     axios
-      .get('https://safe-reef-89727.herokuapp.com/api/persons')
+      .get(apiURL)
       .then(response => {
         setPersons(response.data)
         console.log(response.data)
@@ -74,6 +75,14 @@ const App = () => {
         )
         setTimeout(() => {
           setNotificationMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setErrorMessage(
+          error.message
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
         }, 5000)
       })
     }
@@ -167,7 +176,7 @@ const Persons = ({persons, filter, handleDelete}) => {
   return (
     <ul>
       {persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase())).map(person =>
-        <Person key={person.name} person={person} handleDelete={handleDelete} />
+        <Person key={person.id} person={person} handleDelete={handleDelete} />
       )}
     </ul>
   )
@@ -175,7 +184,7 @@ const Persons = ({persons, filter, handleDelete}) => {
 
 const Person = ({person, handleDelete}) => {
   return(
-    <li key={person.name}>{person.name}: {person.number} <button id={person.id} onClick={handleDelete}>delete</button></li>
+    <li key={person.id}>{person.name}: {person.number} <button id={person.id} onClick={handleDelete}>delete</button></li>
   )
 }
 
