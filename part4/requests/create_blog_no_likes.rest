@@ -1,0 +1,8 @@
+POST http://localhost:3003/api/blogs HTTP/1.1
+content-type: application/json
+
+{
+    "title": "The Big Fake Blog",
+    "author": "Namey McNamerson",
+    "url": "http://www.thebigblog.com/"
+}

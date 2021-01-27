@@ -45,6 +45,46 @@ test('post request creates a new blog', async () => {
   */
 })
 
+test('post with no likes data defaults to zero likes', async () => {
+  var newblog = {
+    title: "Post with no likes",
+    author: "Auther A. Pearson",
+    url: "http://www.thisurlwontwork.com/blog" //no likes
+  }
+
+  var response = await api
+    .post('/api/blogs')
+    .send(newblog)
+    .expect(201)
+  
+  expect(response.body.likes).toBe(0)
+})
+
+
+
+test('post with NO title/URL returns 400 bad request', async () => {
+  var newblog = {
+    author: "Auther A. Pearson", 
+    url: "http://www.postwithnotitle.com/blog" //NO TITLE
+  }
+
+  var response = await api
+    .post('/api/blogs')
+    .send(newblog)
+    .expect(400)
+
+  var newblog = {
+    title: "Post with no URL",
+    author: "Auther A. Pearson" //NO URL
+  }
+  
+  var response = await api
+    .post('/api/blogs')
+    .send(newblog)
+    .expect(400)
+    
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

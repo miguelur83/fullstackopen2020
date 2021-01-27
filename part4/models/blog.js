@@ -1,9 +1,15 @@
 const mongoose = require('mongoose')
 
 const blogSchema = new mongoose.Schema({
-  title: String,
+  title: {
+    type: String,
+    required: [true, 'Title is required']
+  },
   author: String,
-  url: String,
+  url: {
+    type: String,
+    required: [true, 'URL is required']
+  },
   likes: Number
 })
 
@@ -12,6 +18,9 @@ blogSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
+    if (returnedObject.likes === undefined){
+      returnedObject.likes = 0
+    }
   }
 })
 
