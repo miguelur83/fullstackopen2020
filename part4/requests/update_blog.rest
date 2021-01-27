@@ -1,0 +1,10 @@
+PUT http://localhost:3003/api/blogs/60115f74174163e421e048f7 HTTP/1.1
+content-type: application/json
+
+{
+    "id": "60115f74174163e421e048f7",
+    "title": "Blog to be updated UPDATED",
+    "author": "Namey M.N. McNamerson",
+    "url": "http://www.thebigblog.com/",
+    "likes": 65
+}
